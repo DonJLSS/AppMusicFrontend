@@ -56,12 +56,12 @@
     bottom: 26px; /* Distancia desde la parte inferior */
     right: 26px; /* Distancia desde la parte derecha */
     z-index: 1000; /* Asegura que esté por encima de otros elementos */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el botón */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
     transition: transform 0.3s ease-in-out;
   }
   
   .fab-button:hover {
-    transform: scale(1.1); /* Efecto de agrandamiento al pasar el ratón */
+    transform: scale(1.1); 
   }
 
   .results-list {
@@ -97,6 +97,23 @@
   button[mat-icon-button] {
     margin-left: 1rem;
   }
+  
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    color: #666;
+  }
+  
+  .no-results-image {
+    max-width: 120px; 
+    height: auto; 
+    opacity: 0.7; 
+  }
+  
   
   
   

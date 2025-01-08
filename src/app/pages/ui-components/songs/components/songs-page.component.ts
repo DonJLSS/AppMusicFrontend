@@ -1,24 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Observable, map, of, startWith } from 'rxjs';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
 import { PipesModule } from "../../../../pipes/pipes.module";
 import { MatDialog } from '@angular/material/dialog';
 import { EditSongDialogComponent } from './edit-song-dialog.component';
-export interface Section {
-  name: string;
-  updated: Date;
-}
 
 @Component({
-
   imports: [
     MaterialModule,
     ReactiveFormsModule,
     CommonModule,
-    PipesModule
-],
+    PipesModule,
+    FormsModule,
+  ],
   standalone: true,
   selector: 'app-songs-page',
   templateUrl: './songs-page.component.html',
@@ -27,47 +23,73 @@ export interface Section {
 export class SongsPageComponent implements OnInit {
   constructor(private dialog: MatDialog) {}
 
-
-  filteredSongs = [
+  songs = [
     { title: 'Psycho Killer', artist: 'Talking Heads', album: 'Talking Heads: 77', duration: 270 },
     { title: 'Once in a Lifetime', artist: 'Talking Heads', album: 'Remain in Light', duration: 240 },
     { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
-    { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
-    { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
-    { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
-    { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
-    { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
-    { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
+    { title: 'Life on Mars?', artist: 'David Bowie', album: 'Hunky Dory', duration: 210 },
+    { title: 'Heroes', artist: 'David Bowie', album: 'Heroes', duration: 245 },
+    { title: 'Space Oddity', artist: 'David Bowie', album: 'Space Oddity', duration: 300 },
+    { title: 'Bohemian Rhapsody', artist: 'Queen', album: 'A Night at the Opera', duration: 355 },
+    { title: 'Another One Bites the Dust', artist: 'Queen', album: 'The Game', duration: 215 },
+    { title: 'Don’t Stop Me Now', artist: 'Queen', album: 'Jazz', duration: 210 },
+    { title: 'Billie Jean', artist: 'Michael Jackson', album: 'Thriller', duration: 294 },
+    { title: 'Beat It', artist: 'Michael Jackson', album: 'Thriller', duration: 258 },
+    { title: 'Thriller', artist: 'Michael Jackson', album: 'Thriller', duration: 357 },
+    { title: 'Wonderwall', artist: 'Oasis', album: '(What\'s the Story) Morning Glory?', duration: 258 },
+    { title: 'Don’t Look Back in Anger', artist: 'Oasis', album: '(What\'s the Story) Morning Glory?', duration: 290 },
+    { title: 'Champagne Supernova', artist: 'Oasis', album: '(What\'s the Story) Morning Glory?', duration: 450 },
+    { title: 'Smells Like Teen Spirit', artist: 'Nirvana', album: 'Nevermind', duration: 301 },
+    { title: 'Come As You Are', artist: 'Nirvana', album: 'Nevermind', duration: 219 },
+    { title: 'Lithium', artist: 'Nirvana', album: 'Nevermind', duration: 257 },
+    { title: 'Shape of You', artist: 'Ed Sheeran', album: 'Divide', duration: 233 },
+    { title: 'Perfect', artist: 'Ed Sheeran', album: 'Divide', duration: 263 },
+    { title: 'Castle on the Hill', artist: 'Ed Sheeran', album: 'Divide', duration: 261 },
   ];
-
+  
+  filteredSongs = [...this.songs];
 
   myControl = new FormControl('');
   sortOptions: string[] = ['Title', 'Duration', 'Artist', 'Album'];
-  filteredOptions: Observable<string[]> = of([]);
+  filters = {
+    title: '',
+    duration: '',
+    artist: '',
+    album: ''
+  };
 
-  ngOnInit() {
-   /*  this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    ); */
+  ngOnInit() {}
+
+  applyFilters(): void {
+    this.filteredSongs = this.songs.filter(song => {
+      return (
+        (!this.filters.title ||
+          song.title.toLowerCase().includes(this.filters.title.toLowerCase())) &&
+        (!this.filters.duration ||
+          song.duration === Number(this.filters.duration)) &&
+        (!this.filters.artist ||
+          song.artist.toLowerCase().includes(this.filters.artist.toLowerCase())) &&
+        (!this.filters.album ||
+          song.album.toLowerCase().includes(this.filters.album.toLowerCase()))
+      );
+    });
   }
 
   onSortOptionSelect(option: string): void {
-    console.log('Selected sort option:', option);
-    if(option === 'Duration')
-      this.filteredSongs = this.filteredSongs.sort((a, b) => a.duration - b.duration);
-    if(option === 'Title')
-      this.filteredSongs = this.filteredSongs.sort((a, b) => a.title.localeCompare(b.title));
-    if(option === 'Artist')
-      this.filteredSongs = this.filteredSongs.sort((a, b) => a.artist.localeCompare(b.artist));
-    if(option === 'Album')
-      this.filteredSongs = this.filteredSongs.sort((a, b) => a.album.localeCompare(b.album));
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.sortOptions.filter(option => option.toLowerCase().includes(filterValue));
+    switch (option) {
+      case 'Duration':
+        this.filteredSongs = [...this.filteredSongs].sort((a, b) => a.duration - b.duration);
+        break;
+      case 'Title':
+        this.filteredSongs = [...this.filteredSongs].sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'Artist':
+        this.filteredSongs = [...this.filteredSongs].sort((a, b) => a.artist.localeCompare(b.artist));
+        break;
+      case 'Album':
+        this.filteredSongs = [...this.filteredSongs].sort((a, b) => a.album.localeCompare(b.album));
+        break;
+    }
   }
 
   onNewSongClick(): void {
@@ -82,16 +104,12 @@ export class SongsPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const index = this.filteredSongs.findIndex(s => s === song);
+        const index = this.songs.findIndex(s => s === song);
         if (index !== -1) {
-          this.filteredSongs[index] = { ...result };
+          this.songs[index] = { ...result };
+          this.applyFilters();
         }
       }
     });
   }
-
-
-
-
-  
 }
