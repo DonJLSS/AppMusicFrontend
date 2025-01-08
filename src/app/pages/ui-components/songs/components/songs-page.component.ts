@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable, map, of, startWith } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
-import { PipesModule } from "../../../pipes/pipes.module";
+import { PipesModule } from "../../../../pipes/pipes.module";
+import { MatDialog } from '@angular/material/dialog';
+import { EditSongDialogComponent } from './edit-song-dialog.component';
 export interface Section {
   name: string;
   updated: Date;
@@ -11,13 +13,19 @@ export interface Section {
 
 @Component({
 
-  imports: [MaterialModule, ReactiveFormsModule, CommonModule, PipesModule],
+  imports: [
+    MaterialModule,
+    ReactiveFormsModule,
+    CommonModule,
+    PipesModule
+],
   standalone: true,
   selector: 'app-songs-page',
   templateUrl: './songs-page.component.html',
   styleUrl: './songs-page.component.css'
 })
-export class SongsPageComponent implements OnInit{
+export class SongsPageComponent implements OnInit {
+  constructor(private dialog: MatDialog) {}
 
 
   filteredSongs = [
@@ -31,7 +39,7 @@ export class SongsPageComponent implements OnInit{
     { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
     { title: 'Burning Down the House', artist: 'Talking Heads', album: 'Speaking in Tongues', duration: 230 },
   ];
-  
+
 
   myControl = new FormControl('');
   sortOptions: string[] = ['Title', 'Duration', 'Artist', 'Album'];
@@ -66,10 +74,23 @@ export class SongsPageComponent implements OnInit{
     console.log('New Song button clicked!');
   }
 
-  viewDetails(song: any): void {
-    console.log('Viewing details for:', song);
-    // Aquí puedes implementar la lógica para mostrar detalles
+  editInformation(song: any): void {
+    const dialogRef = this.dialog.open(EditSongDialogComponent, {
+      width: '250px',
+      data: { ...song }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const index = this.filteredSongs.findIndex(s => s === song);
+        if (index !== -1) {
+          this.filteredSongs[index] = { ...result };
+        }
+      }
+    });
   }
+
+
 
 
   

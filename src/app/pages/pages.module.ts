@@ -9,7 +9,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
 import { AppDashboardComponent } from './explore/explore.component';
-import { SongsPageComponent } from './ui-components/songs/songs-page.component';
+import { SongsPageComponent } from './ui-components/songs/components/songs-page.component';
 import { ArtistPageComponent } from './ui-components/artists/artist-page.component';
 
 @NgModule({
