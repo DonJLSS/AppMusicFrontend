@@ -6,6 +6,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { PipesModule } from "../../../../pipes/pipes.module";
 import { MatDialog } from '@angular/material/dialog';
 import { EditSongDialogComponent } from './edit-song-dialog.component';
+import { SongService } from '../service/song.service';
 
 @Component({
   imports: [
@@ -21,7 +22,10 @@ import { EditSongDialogComponent } from './edit-song-dialog.component';
   styleUrl: './songs-page.component.css'
 })
 export class SongsPageComponent implements OnInit {
-  constructor(private dialog: MatDialog) {}
+  
+  constructor(private dialog: MatDialog, private songService: SongService ) {}
+
+  
 
   songs = [
     { title: 'Psycho Killer', artist: 'Talking Heads', album: 'Talking Heads: 77', duration: 270 },
@@ -58,7 +62,16 @@ export class SongsPageComponent implements OnInit {
     album: ''
   };
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this.loadSongs();
+  }
+
+  loadSongs(): void {
+    this.songService.getSongs().subscribe(data => {
+      this.songs = data;
+      this.filteredSongs = data; 
+    });
+  }
 
   applyFilters(): void {
     this.filteredSongs = this.songs.filter(song => {
