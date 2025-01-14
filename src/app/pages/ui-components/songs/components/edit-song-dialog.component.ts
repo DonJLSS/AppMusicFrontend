@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-edit-song-dialog',
   template: `
@@ -15,10 +14,13 @@ import { ReactiveFormsModule } from '@angular/forms';
           <input matInput placeholder="Title" formControlName="title">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Artist" formControlName="artist">
+          <input matInput placeholder="Artist" formControlName="artistName">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Album" formControlName="album">
+          <input matInput placeholder="Album (optional)" formControlName="albumName">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="URL" formControlName="songUrl">
         </mat-form-field>
         <mat-form-field>
           <input matInput type="number" placeholder="Duration" formControlName="duration">
@@ -41,12 +43,15 @@ export class EditSongDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder
   ) {
+    
     this.form = this.fb.group({
+      id: [data.id],
       title: [data.title, Validators.required],
-      artist: [data.artist, Validators.required],
-      album: [data.album, Validators.required],
+      artistName: [data.artistName, Validators.required],
+      albumName: [data.albumName],
+      songUrl: [data.songUrl, Validators.required],
       duration: [data.duration, [Validators.required, Validators.min(1)]]
-    });
+        });
   }
 
   onNoClick(): void {

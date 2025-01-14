@@ -31,7 +31,7 @@
         <input
           matInput
           placeholder=""
-          [(ngModel)]="filters.artist"
+          [(ngModel)]="filters.artistName"
           (keyup.enter)="applyFilters()"
         />
         <mat-icon matSuffix>filter_alt</mat-icon>
@@ -43,7 +43,7 @@
         <input
           matInput
           placeholder=""
-          [(ngModel)]="filters.album"
+          [(ngModel)]="filters.albumName"
           (keyup.enter)="applyFilters()"
         />
         <mat-icon matSuffix>filter_alt</mat-icon>
@@ -71,15 +71,18 @@
   <div class="results-list">
     <div *ngIf="filteredSongs.length > 0; else noResults">
       <div
-        class="result-item d-flex align-items-center"
+        class="result-item d-flex align-items-center song-row"
         *ngFor="let song of filteredSongs"
       >
-        <span class="song-title flex-grow-1">{{ song.title }}</span>
-        <span class="song-artist flex-grow-1">{{ song.artist }}</span>
-        <span class="song-album flex-grow-1">{{ song.album }}</span>
-        <span class="song-duration">{{ song.duration | duration }}</span>
+        <span class="song-title flex-grow-1 col-3">{{ song.title }}</span>
+        <span class="song-artist flex-grow-1 col-3 text-start">{{ song.artistName }}</span>
+        <span class="song-album flex-grow-1 col-3 text-start">{{ song.albumName }}</span>
+        <span class="song-duration col-2">{{ song.duration | duration }}</span>
         <button mat-icon-button color="primary" (click)="editInformation(song)">
           <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteInformation(song)">
+          <mat-icon>delete</mat-icon>
         </button>
       </div>
     </div>
