@@ -1,24 +1,131 @@
-:host {
-    display: block;
-}
-.search-bar-container {
-    padding: 0px 56px 0px 8px;
-    margin-bottom: 12px;
+.container {
+    padding: 16px;
+  }
+  
+  .search-bar-container {
+    padding: 8px 16px;
     background: #eaf1fb;
     border-radius: 32px;
     display: flex;
     align-items: center;
-
-    > input {
-        font-size: 1.1rem;
-        outline: none;
-        border: none;
-        background: inherit;
-        min-width: 352px;
-    }
-}
-
-.filter-form {
+    max-height: 40px;
+  }
+  
+  .search-bar-container input {
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background: inherit;
     flex: 1;
-    margin: 0 10px;
-}
+  }
+  
+  .filter-form {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .sort-by-form {
+    max-width: 250px; 
+    flex: none;
+  }
+  
+  .catalog-grid {
+    padding: 16px;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem; 
+  }
+
+  .search-button {
+    margin-left: -8px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sort-button {
+    margin-top: -20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .fab-button {
+    position: fixed;
+    bottom: 15px; /* Distancia desde la parte inferior */
+    right: 30px; /* Distancia desde la parte derecha */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .fab-button:hover {
+    transform: scale(1.1); 
+  }
+
+  .results-list {
+    margin-top: 1rem;
+    margin-bottom: 80px;
+  }
+  
+  .result-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .result-item:last-child {
+    border-bottom: none;
+  }
+  
+  .artist-dateOfBirth,
+  .artist-albumsCount {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .artist-nationality {
+    width: 80px;
+    text-align: center;
+  }
+
+  .artist-name {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+  
+  button[mat-icon-button] {
+    margin-left: 1rem;
+  }
+  
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    color: #666;
+  }
+  
+  .no-results-image {
+    max-width: 120px; 
+    height: auto; 
+    opacity: 0.7; 
+  }
+  
+  
+  
+  

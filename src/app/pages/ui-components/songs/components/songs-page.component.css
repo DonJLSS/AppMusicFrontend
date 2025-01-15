@@ -85,7 +85,6 @@
     border-bottom: none;
   }
   
-  .song-title,
   .song-artist,
   .song-album {
     flex-grow: 1;
@@ -97,6 +96,14 @@
   .song-duration {
     width: 80px;
     text-align: center;
+    font-weight: bold;
+  }
+
+  .song-title {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-weight: bold;
   }
   
