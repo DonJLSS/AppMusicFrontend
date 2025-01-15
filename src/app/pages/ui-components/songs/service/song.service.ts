@@ -19,6 +19,10 @@ export class SongService {
     return this.http.get<any[]>(this.apiUrl, { params });
   }
 
+  addSong(song: Song): Observable<Song> {
+    return this.http.post<Song>(this.apiUrl, song);
+  }
+
   updateSong(id: number, song: Song): Observable<Song> {
     return this.http.put<Song>(this.apiUrl + '/' + id, song);
   }

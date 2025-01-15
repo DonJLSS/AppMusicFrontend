@@ -8,6 +8,7 @@ import { EditSongDialogComponent } from './edit-song-dialog.component';
 import { SongService } from '../service/song.service';
 import { Song } from 'src/app/model/songs/songs.interface';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   imports: [
@@ -83,8 +84,28 @@ export class SongsPageComponent implements OnInit {
   }
 
   onNewSongClick(): void {
-    console.log('New Song button clicked!');
+    const dialogRef = this.dialog.open(EditSongDialogComponent,  {
+      width: '400px',
+      data:{title: '', artistName: '', albumName:'', songUrl:'', duration: null}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.songService.addSong(result).subscribe(
+          (          newSong: Song) => {
+            this.songs.push(newSong);
+            this.applyFilters();
+            console.log('New song added successfully');
+          },
+          (          error: any) => {
+            console.error('Error adding new song:', error);
+          }
+        );
+      }
+    });
+
   }
+
 
   editInformation(song: Song): void {
     const dialogRef = this.dialog.open(EditSongDialogComponent, {

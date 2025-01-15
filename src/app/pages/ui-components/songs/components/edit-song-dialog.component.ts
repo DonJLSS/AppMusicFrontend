@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-edit-song-dialog',
   template: `
-    <h2 mat-dialog-title>Edit Song</h2>
+    <h2 mat-dialog-title>Song Information</h2>
     <mat-dialog-content>
       <form [formGroup]="form">
         <mat-form-field>
