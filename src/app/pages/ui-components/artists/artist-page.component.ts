@@ -140,6 +140,16 @@ export class ArtistPageComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        // Check if dateOfBirth is a string before parsing
+      if (typeof result.dateOfBirth === 'string') {
+        result.dateOfBirth = this.parseDate(result.dateOfBirth);
+      } else if (result.dateOfBirth instanceof Date) {
+        // If it's already a Date object, no need to parse
+        result.dateOfBirth = new Date(result.dateOfBirth);
+      } else {
+        console.error('Invalid date format:', result.dateOfBirth);
+        return; // Exit if the date is invalid
+      }
         this.artistService.updateArtist(artist.id,result).subscribe(
           updatedArtist => {
             const index = this.artists.findIndex(s => s.id === updatedArtist.id);
@@ -155,6 +165,25 @@ export class ArtistPageComponent implements OnInit {
         );
       }
     });
+  }
+
+  private parseDate(dateString: string): Date {
+    if (!dateString) return new Date(); // Return current date if string is empty
+  
+    // Check if the date is in ISO format (yyyy-MM-dd)
+    if (dateString.includes('-')) {
+      return new Date(dateString);
+    }
+  
+    // If it's in dd/MM/yyyy format
+    const [day, month, year] = dateString.split('/');
+    if (day && month && year) {
+      return new Date(+year, +month - 1, +day);
+    }
+  
+    // If parsing fails, return current date
+    console.error('Invalid date format:', dateString);
+    return new Date();
   }
  
   
