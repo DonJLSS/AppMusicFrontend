@@ -4,9 +4,9 @@ import { Routes } from '@angular/router';
 import { AppBadgeComponent } from './badge/badge.component';
 import { AppChipsComponent } from './chips/chips.component';
 import { SongsPageComponent } from './songs/components/songs-page.component';
-import { AppMenuComponent } from './menu/menu.component';
 import { AppTooltipsComponent } from './tooltips/tooltips.component';
 import { ArtistPageComponent } from './artists/artist-page.component';
+import { AlbumPageComponent } from './albums/album/album-page.component';
 
 export const UiComponentsRoutes: Routes = [
   {
@@ -27,6 +27,10 @@ export const UiComponentsRoutes: Routes = [
       {
         path: 'artists',
         component: ArtistPageComponent,
+      },
+      {
+        path: 'albums',
+        component: AlbumPageComponent,
       },
       {
         path: 'tooltips',

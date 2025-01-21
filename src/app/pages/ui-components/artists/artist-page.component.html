@@ -71,6 +71,7 @@
 <div class="results-list">
   <div *ngIf="filteredArtists.length > 0; else noResults">
     <div
+      @routeAnimationTrigger
       class="result-item d-flex align-items-center artist-row"
       *ngFor="let artist of filteredArtists"
     >
@@ -87,7 +88,7 @@
     </div>
   </div>
   <ng-template #noResults>
-    <div class="no-results">
+    <div class="no-results" [@fadeIn]>
       <img
         src="assets/images/no-results.png"
         alt="No results found"

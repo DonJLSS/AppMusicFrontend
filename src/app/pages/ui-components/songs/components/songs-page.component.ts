@@ -1,5 +1,6 @@
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { PipesModule } from '../../../../pipes/pipes.module';
@@ -7,8 +8,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditSongDialogComponent } from './edit-song-dialog.component';
 import { SongService } from '../service/song.service';
 import { Song } from 'src/app/model/songs/songs.interface';
-import { ConfirmDialogComponent } from './confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 import { Title } from '@angular/platform-browser';
+import { routeAnimationsState } from '../../shared/route-animations';
+import { trigger, transition, style, animate, state } from '@angular/animations';
+
 
 @Component({
   imports: [
@@ -22,8 +26,18 @@ import { Title } from '@angular/platform-browser';
   selector: 'app-songs-page',
   templateUrl: './songs-page.component.html',
   styleUrl: './songs-page.component.css',
+  animations: [
+    trigger('fadeIn', [
+      state('void', style({ opacity: 0 })),
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1s 500ms ease-in', style({ opacity: 1 }))
+      ])
+    ])
+    ,routeAnimationsState],
 })
 export class SongsPageComponent implements OnInit {
+
   constructor(private dialog: MatDialog, private songService: SongService) {}
 
   songs: Song[] = [];

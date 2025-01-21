@@ -14,5 +14,16 @@ export class ArtistService {
 
     addArtist(artist: Artist): Observable<Artist> {
         return this.http.post<Artist>(this.apiUrl, artist);
-      }
+    }
+
+    deleteArtist(id: number): Observable<any> {
+        return this.http.delete<any>(this.apiUrl + '/' + id);
+    }
+
+    updateArtist(id: number, artist: Artist): Observable<Artist> {
+        return this.http.put<Artist>(this.apiUrl + '/' + id, artist);
+    }
+
+
+
 }

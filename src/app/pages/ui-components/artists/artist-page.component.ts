@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, map, of, startWith } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
-import { ArtistService } from '../songs/service/artist.service';
-import { Artist } from 'src/app/model/artists/artist.interface';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
+
 import { EditArtistDialogComponent } from './edit-artist-dialog.component';
+import { ArtistService } from '../songs/service/artist.service';
+import { Artist } from 'src/app/model/artists/artist.interface';
+import routeAnimationsState from '../shared/route-animations';
+import { trigger, transition, style, animate, state } from '@angular/animations';
+
 
 @Component({
   imports: [
@@ -21,9 +26,19 @@ import { EditArtistDialogComponent } from './edit-artist-dialog.component';
     templateUrl: 'artist-page.component.html',
     styleUrl:'artist-page.component.css',
     standalone: true,
+    animations: [
+      trigger('fadeIn', [
+        state('void', style({ opacity: 0 })),
+        transition(':enter', [
+          style({ opacity: 0 }),
+          animate('1s 500ms ease-in', style({ opacity: 1 }))
+        ])
+      ])
+      ,routeAnimationsState],
 })
 
 export class ArtistPageComponent implements OnInit {
+
   constructor(private dialog: MatDialog, private artistService: ArtistService) {}
 
   artists: Artist[] = [];
@@ -117,61 +132,53 @@ export class ArtistPageComponent implements OnInit {
     });
   }
   
-    editInformation(artist: Artist){
-      console.log('boton pulsao para editar');
-    }
-  
-    deleteInformation(artist: Artist){
-      console.log('boton pulsao para borrar');
-    }
-  
-  /* editInformation(song: Song): void {
-    const dialogRef = this.dialog.open(EditSongDialogComponent, {
+  editInformation(artist: Artist): void {
+    const dialogRef = this.dialog.open(EditArtistDialogComponent, {
       width: '400px',
-      data: { ...song }
+      data: { ...artist }
     });
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.songService.updateSong(song.id,result).subscribe(
-          updatedSong => {
-            const index = this.songs.findIndex(s => s.id === updatedSong.id);
+        this.artistService.updateArtist(artist.id,result).subscribe(
+          updatedArtist => {
+            const index = this.artists.findIndex(s => s.id === updatedArtist.id);
             if (index !== -1) {
-              this.songs[index] = updatedSong;
+              this.artists[index] = updatedArtist;
               this.applyFilters();
             }
-            console.log('Song updated successfully');
+            console.log('Artist updated successfully');
           },
           error => {
-            console.error('Error updating song:', error);
+            console.error('Error updating artist:', error);
           }
         );
       }
     });
   }
-  
+ 
   
 
-  deleteInformation(song: Song): void {
+  deleteInformation(artist: Artist): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '300px',
       data: { 
         title: 'Confirm Deletion',
-        message: 'Are you sure you want to delete this song?'
+        message: 'Are you sure you want to delete this artist?'
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        const index = this.songs.findIndex(s => s.id === song.id);
+        const index = this.artists.findIndex(a => a.id === artist.id);
         if (index !== -1) {
-          this.songs.splice(index, 1);
+          this.artists.splice(index, 1);
           this.applyFilters();
         }
-        this.songService.deleteSong(song.id).subscribe(() => {
-          console.log('Song deleted successfully');
+        this.artistService.deleteArtist(artist.id).subscribe(() => {
+          console.log('Artist deleted successfully');
         });
       }
     });
-  } */
+  } 
 }

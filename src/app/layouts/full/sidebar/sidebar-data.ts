@@ -20,6 +20,11 @@ export const navItems: NavItem[] = [
     route:'/ui-components/artists',
   },
   {
+    displayName: 'Albums',
+    iconName: 'disc',
+    route: '/ui-components/albums',
+  },
+ /*  {
     navCap: 'Ui Components',
   },
   {
@@ -42,7 +47,7 @@ export const navItems: NavItem[] = [
     displayName: 'Tooltips',
     iconName: 'tooltip',
     route: '/ui-components/tooltips',
-  },
+  }, */
   {
     navCap: 'Auth',
   },
@@ -56,7 +61,7 @@ export const navItems: NavItem[] = [
     iconName: 'user-plus',
     route: '/authentication/register',
   },
-  {
+  /* {
     navCap: 'Extra',
   },
   {
@@ -68,5 +73,5 @@ export const navItems: NavItem[] = [
     displayName: 'Sample Page',
     iconName: 'aperture',
     route: '/extra/sample-page',
-  },
+  }, */
 ];
