@@ -168,20 +168,14 @@ export class ArtistPageComponent implements OnInit {
   }
 
   private parseDate(dateString: string): Date {
-    if (!dateString) return new Date(); // Return current date if string is empty
-  
-    // Check if the date is in ISO format (yyyy-MM-dd)
+    if (!dateString) return new Date(); 
     if (dateString.includes('-')) {
       return new Date(dateString);
     }
-  
-    // If it's in dd/MM/yyyy format
     const [day, month, year] = dateString.split('/');
     if (day && month && year) {
       return new Date(+year, +month - 1, +day);
     }
-  
-    // If parsing fails, return current date
     console.error('Invalid date format:', dateString);
     return new Date();
   }
