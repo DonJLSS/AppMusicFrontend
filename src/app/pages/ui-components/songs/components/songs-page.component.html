@@ -102,11 +102,10 @@
   <!-- Paginator -->
   <mat-paginator 
     [length]="totalItems"
-    [pageIndex]="currentPage" 
     [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 25]"
     (page)="onPageChange($event)"
-    aria-label="Select page of songs">
+    >
   </mat-paginator>
 
   <!-- Floating button -->

@@ -9,10 +9,9 @@ import { EditSongDialogComponent } from './edit-song-dialog.component';
 import { SongService } from '../service/song.service';
 import { Song } from 'src/app/model/songs/songs.interface';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
-import { Title } from '@angular/platform-browser';
 import { routeAnimationsState } from '../../shared/route-animations';
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { HttpParams } from '@angular/common/http';
 
 
@@ -47,6 +46,9 @@ export class SongsPageComponent implements OnInit {
   pageSize: number = 5;
   currentPage: number = 0;
 
+  sortBy: string = 'title'; // Default sort by title
+  sortDirection: string = 'asc'; 
+
   songs: Song[] = [];
   filteredSongs: Song[] = [];
 
@@ -64,30 +66,30 @@ export class SongsPageComponent implements OnInit {
   }
 
   loadSongs(): void {
-    let params = new HttpParams()
-      .set('page', this.currentPage.toString())
-      .set('size', this.pageSize.toString());
-
-    
-      if (this.filters.title) {
-        params = params.set('title', this.filters.title);
-      }
-      if (this.filters.duration) {
-        params = params.set('duration', this.filters.duration);
-      }
-      if (this.filters.artistName) {
-        params = params.set('artistName', this.filters.artistName);
-      }
-      if (this.filters.albumName) {
-        params = params.set('albumName', this.filters.albumName);
-      }
+    const params = new HttpParams()
+      .set('page', this.currentPage.toString()) 
+      .set('size', this.pageSize.toString()) 
+      .set('title', this.filters.title || '')
+      .set('duration', this.filters.duration ? this.filters.duration.toString() : '')
+      .set('artistName', this.filters.artistName || '')
+      .set('albumName', this.filters.albumName || '')
+      .set('sortBy', this.sortBy)
+      .set('sortDirection', this.sortDirection);
+  
+    console.log('Parámetros enviados:', params.toString());
   
     this.songService.getSongs(params).subscribe(
       (response: any) => {
-        this.songs = response.content; 
-        this.filteredSongs = [...this.songs]; 
-        this.totalItems = response.totalElements; 
-        this.currentPage = response.pageable.pageNumber;
+        
+        if (response && response.content) {
+          this.songs = response.content;
+          this.filteredSongs = response.content;
+          this.totalItems = response.totalElements;
+        } else {
+          this.songs = [];
+          this.filteredSongs = [];
+          this.totalItems = 0;
+        }
       },
       (error) => {
         console.error('Error loading songs:', error);
@@ -96,68 +98,36 @@ export class SongsPageComponent implements OnInit {
   }
   
 
-  onPageChange(event: any): void {
+  onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
     this.loadSongs();
   }
 
   applyFilters(): void {
-    // Filtramos las canciones que ya están en la página actual
-    let filtered = this.songs.filter(song => {
-      return (
-        (!this.filters.title ||
-          song.title.toLowerCase().includes(this.filters.title.toLowerCase())) &&
-        (!this.filters.duration ||
-          song.duration === Number(this.filters.duration)) &&
-        (!this.filters.artistName ||
-          song.artistName.toLowerCase().includes(this.filters.artistName.toLowerCase())) &&
-        (!this.filters.albumName ||
-          (song.albumName && song.albumName.toLowerCase().includes(this.filters.albumName.toLowerCase())))
-      );
-    });
-  
-    // Actualizar lista de canciones filtradas y total de elementos
-    this.filteredSongs = [...filtered];
-    this.totalItems = filtered.length;
+    this.currentPage = 0;
+    this.loadSongs();
   }
 
   onSortOptionSelect(option: string): void {
-    if (!this.filteredSongs || this.filteredSongs.length === 0) return;
+    switch (option) {
+      case 'Duration':
+        this.sortBy = 'duration';
+        break;
+      case 'Title':
+        this.sortBy = 'title';
+        break;
+      case 'Artist':
+        this.sortBy = 'artistName'; 
+        break;
+      case 'Album':
+        this.sortBy = 'albumName'; 
+        break;
+    }
   
-    this.filteredSongs = [...this.filteredSongs].sort((a, b) => {
-      switch (option) {
-        case 'Duration':
-          return a.duration - b.duration;
-        case 'Title':
-          return a.title.localeCompare(b.title);
-        case 'Artist':
-          return a.artistName.localeCompare(b.artistName);
-        case 'Album':
-          return (a.albumName || '').localeCompare(b.albumName || '');
-        default:
-          return 0;
-      }
-    });
-  }
-
-  loadSongsWithSorting(sortField: string): void {
-    let params = new HttpParams()
-      .set('page', this.currentPage.toString())
-      .set('size', this.pageSize.toString())
-      .set('sort', sortField + ',asc'); 
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
   
-    this.songService.getSongs(params).subscribe(
-      (response: any) => {
-        this.currentPage = response.number;
-        this.songs = response.content;
-        this.filteredSongs = [...this.songs];
-        this.totalItems = response.totalElements;
-      },
-      (error) => {
-        console.error('Error loading sorted songs:', error);
-      }
-    );
+    this.loadSongs(); 
   }
 
   onNewSongClick(): void {

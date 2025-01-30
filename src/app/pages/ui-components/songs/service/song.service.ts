@@ -11,27 +11,28 @@ export class SongService {
 
   constructor(private http: HttpClient) {}
 
-  getSongs(params: any): Observable<any> {
-    let queryParams = new HttpParams()
-      .set('pageIndex', params.pageIndex || '0')
-      .set('pageSize', params.pageSize || '5');
+  getSongs(params: HttpParams): Observable<any> {
+    const defaultParams = new HttpParams()
+      .set('page', '0')
+      .set('size', '5')
+      .set('sortBy', 'title')
+      .set('sortDirection', 'asc');
   
-    if (params.title) {
-      queryParams = queryParams.set('title', params.title);
-    }
-    if (params.duration) {
-      queryParams = queryParams.set('duration', params.duration);
-    }
-    if (params.artistName) {
-      queryParams = queryParams.set('artistName', params.artistName);
-    }
-    if (params.albumName) {
-      queryParams = queryParams.set('albumName', params.albumName);
-    }
+    const queryParams = defaultParams
+      .set('page', params.get('page') || '0')
+      .set('size', params.get('size') || '5')
+      .set('sortBy', params.get('sortBy') || 'title')
+      .set('sortDirection', params.get('sortDirection') || 'asc')
+      .set('title', params.get('title') || '')
+      .set('duration', params.get('duration') || '')
+      .set('artistName', params.get('artistName') || '')
+      .set('albumName', params.get('albumName') || '');
+  
+    console.log('Parámetros enviados:', queryParams.toString());
   
     return this.http.get(`${this.apiUrl}/search`, { params: queryParams });
   }
-  
+
   
 
 
